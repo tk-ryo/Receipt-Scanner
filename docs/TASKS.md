@@ -2,16 +2,16 @@
 
 ## 1. プロジェクト初期セットアップ
 
-- [ ] Backend: FastAPI プロジェクト作成 (`backend/app/main.py`, `requirements.txt`)
-- [ ] Backend: `.env.example` 作成、`config.py` で環境変数管理
-- [ ] Backend: CORS設定（localhost:5173 許可）
-- [ ] Frontend: Vite + React + TypeScript プロジェクト作成
-- [ ] Frontend: Tailwind CSS v4 導入
-- [ ] Frontend: shadcn/ui 導入・初期コンポーネント追加
-- [ ] Frontend: Axios インスタンス作成 (`api/client.ts`)
-- [ ] Frontend: React Router 設定 (`App.tsx`)
-- [ ] `.gitignore` 作成
-- [ ] GiTにコミット
+- [x] Backend: FastAPI プロジェクト作成 (`backend/app/main.py`, `requirements.txt`)
+- [x] Backend: `.env.example` 作成、`config.py` で環境変数管理
+- [x] Backend: CORS設定（localhost:5173 許可）
+- [x] Frontend: Vite + React + TypeScript プロジェクト作成
+- [x] Frontend: Tailwind CSS v4 導入
+- [x] Frontend: shadcn/ui 導入・初期コンポーネント追加
+- [x] Frontend: Axios インスタンス作成 (`api/client.ts`)
+- [x] Frontend: React Router 設定 (`App.tsx`)
+- [x] `.gitignore` 作成
+- [x] GiTにコミット
 
 ## 2. DB設計・モデル定義
 
