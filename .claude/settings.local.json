@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Notion-mcp-server__notion-fetch",
+      "Bash(node --version:*)",
+      "Bash(npm:*)",
+      "Bash(pip:*)",
+      "Bash(npx --version:*)",
+      "WebSearch",
+      "mcp__Notion-mcp-server__notion-search",
+      "Bash(dir:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git init:*)"
+    ]
+  }
+}
