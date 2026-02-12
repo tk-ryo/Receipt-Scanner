@@ -18,6 +18,7 @@
 - [ ] `database.py`: SQLAlchemy エンジン・セッション・`get_db` 定義
 - [ ] `models/receipt.py`: Receipt, ReceiptItem ORM モデル定義
 - [ ] `schemas/receipt.py`: Pydantic リクエスト/レスポンススキーマ定義
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 3. 画像アップロードAPI
 
@@ -25,18 +26,21 @@
 - [ ] `routers/receipts.py`: `POST /api/receipts/scan` エンドポイント（ファイル受付部分）
 - [ ] `main.py`: `/uploads` StaticFiles マウント
 - [ ] `uploads/` ディレクトリ作成
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 4. Claude Vision API 連携
 
 - [ ] `services/vision_service.py`: base64エンコード → API呼出 → JSONパース
 - [ ] レシート解析プロンプト作成（日付・店名・金額・税額・品目・支払方法・カテゴリ）
 - [ ] パース失敗時の正規表現フォールバック実装
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 5. スキャンAPI完成（結合）
 
 - [ ] `POST /api/receipts/scan`: 画像保存 + Vision解析 + DB保存を結合
 - [ ] `services/receipt_service.py`: create 操作実装
 - [ ] Swagger UI で動作確認
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 6. CRUD API
 
@@ -44,6 +48,7 @@
 - [ ] `GET /api/receipts/{id}`: 詳細取得
 - [ ] `PUT /api/receipts/{id}`: 更新（品目の追加・削除・変更含む）
 - [ ] `DELETE /api/receipts/{id}`: 削除（画像ファイルも削除）
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 7. Frontend: 画像アップロード
 
@@ -52,6 +57,7 @@
 - [ ] `components/receipt/ImageUploader.tsx`: D&D + ファイル選択 UI
 - [ ] `components/receipt/ReceiptPreview.tsx`: 画像プレビュー表示
 - [ ] `hooks/useReceiptUpload.ts`: アップロード状態管理フック
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 8. Frontend: 解析結果表示
 
@@ -60,6 +66,7 @@
 - [ ] `components/layout/Header.tsx`: アプリヘッダー
 - [ ] `components/layout/PageContainer.tsx`: ページコンテナ
 - [ ] `pages/ScanPage.tsx`: メイン画面（アップロード→解析→結果表示）
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 9. Frontend: 編集フォーム・保存
 
@@ -67,17 +74,20 @@
 - [ ] `components/receipt/ItemsTable.tsx`: 品目テーブル（行追加・削除・編集）
 - [ ] `hooks/useReceiptEdit.ts`: 編集状態管理・保存フック
 - [ ] Toast通知（保存成功・エラー）
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 10. Frontend: 履歴・詳細画面
 
 - [ ] `hooks/useReceipts.ts`: レシート一覧取得フック
 - [ ] `pages/HistoryPage.tsx`: 過去レシート一覧
 - [ ] `pages/ReceiptDetailPage.tsx`: レシート詳細・再編集画面
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 11. chrome-devtools-mcp の設定
 
 - [ ] chrome-devtools-mcp をプロジェクトの MCP設定に追加
 - [ ] 接続確認（ブラウザ操作・スクリーンショット取得が動作すること）
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 12. Agent Skill「browser-verify」の作成
 
@@ -88,6 +98,7 @@
   - [ ] 異常系テストシナリオ（不正ファイル形式・サイズ超過・存在しないID等）
   - [ ] スクリーンショットを `docs/evidence/` に保存する手順
   - [ ] 検証レポート `docs/evidence/REPORT.md` の生成フォーマット定義
+- [ ] GiTにコミット（コメントは日本語）
 
 ## 13. 自動検証の実行
 
