@@ -78,9 +78,9 @@
 
 ## 10. Frontend: 履歴・詳細画面
 
-- [ ] `hooks/useReceipts.ts`: レシート一覧取得フック
-- [ ] `pages/HistoryPage.tsx`: 過去レシート一覧
-- [ ] `pages/ReceiptDetailPage.tsx`: レシート詳細・再編集画面
+- [x] `hooks/useReceipts.ts`: レシート一覧取得フック
+- [x] `pages/HistoryPage.tsx`: 過去レシート一覧
+- [x] `pages/ReceiptDetailPage.tsx`: レシート詳細・再編集画面
 - [ ] GiTにコミット（コメントは日本語）
 
 ## 11. chrome-devtools-mcp の設定
