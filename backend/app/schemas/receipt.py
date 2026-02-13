@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 class ReceiptItemBase(BaseModel):
     name: str | None = None
-    quantity: int | None = 1
+    quantity: float | None = 1
     price: float | None = None
 
 

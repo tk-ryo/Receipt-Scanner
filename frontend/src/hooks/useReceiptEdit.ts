@@ -47,7 +47,7 @@ export function useReceiptEdit(receipt: Receipt): UseReceiptEditReturn {
         if (field === "name") {
           item.name = value || null;
         } else if (field === "quantity") {
-          item.quantity = value ? parseInt(value, 10) : null;
+          item.quantity = value ? parseFloat(value) : null;
         } else if (field === "price") {
           item.price = value ? parseFloat(value) : null;
         }

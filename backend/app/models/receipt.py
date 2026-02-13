@@ -30,7 +30,7 @@ class ReceiptItem(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     receipt_id = Column(Integer, ForeignKey("receipts.id", ondelete="CASCADE"), nullable=False)
     name = Column(Text, nullable=True)
-    quantity = Column(Integer, nullable=True, default=1)
+    quantity = Column(Float, nullable=True, default=1)
     price = Column(Float, nullable=True)
 
     receipt = relationship("Receipt", back_populates="items")
