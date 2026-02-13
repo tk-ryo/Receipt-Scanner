@@ -1,6 +1,7 @@
-# Skill: browser-verify
-
-Receipt Scanner アプリの動作検証を chrome-devtools-mcp を使って自動実行するスキルです。
+---
+name: browser-verify
+description: Receipt Scanner アプリの動作検証を chrome-devtools-mcp を使って自動実行する
+---
 
 ## 前提条件
 

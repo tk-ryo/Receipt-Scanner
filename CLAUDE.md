@@ -73,14 +73,6 @@ Backend起動後 http://localhost:8000/docs で Swagger UI を確認。
 cd frontend && npm run build
 ```
 
-## 詳細ドキュメント
-
-タスク開始前に、関連するドキュメントを読んでから作業すること。
-
-| ファイル | 内容 |
-|---|---|
-| `agent-docs/coding-conventions.md` | コーディング規約 — レイヤー責務・命名規則・API設計パターン |
-
 ## 設計上の注意事項
 
 - Backend API のベースパスは `/api`。画像配信は `/uploads/{filename}` (StaticFiles)
