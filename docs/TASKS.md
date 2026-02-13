@@ -15,10 +15,10 @@
 
 ## 2. DB設計・モデル定義
 
-- [ ] `database.py`: SQLAlchemy エンジン・セッション・`get_db` 定義
-- [ ] `models/receipt.py`: Receipt, ReceiptItem ORM モデル定義
-- [ ] `schemas/receipt.py`: Pydantic リクエスト/レスポンススキーマ定義
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `database.py`: SQLAlchemy エンジン・セッション・`get_db` 定義
+- [x] `models/receipt.py`: Receipt, ReceiptItem ORM モデル定義
+- [x] `schemas/receipt.py`: Pydantic リクエスト/レスポンススキーマ定義
+- [x] GiTにコミット（コメントは日本語）
 
 ## 3. 画像アップロードAPI
 
