@@ -81,28 +81,27 @@
 - [x] `hooks/useReceipts.ts`: レシート一覧取得フック
 - [x] `pages/HistoryPage.tsx`: 過去レシート一覧
 - [x] `pages/ReceiptDetailPage.tsx`: レシート詳細・再編集画面
-- [ ] GiTにコミット（コメントは日本語）
+- [x] GiTにコミット（コメントは日本語）
 
 ## 11. chrome-devtools-mcp の設定
 
-- [ ] chrome-devtools-mcp をプロジェクトの MCP設定に追加
+- [x] chrome-devtools-mcp をプロジェクトの MCP設定に追加
 - [ ] 接続確認（ブラウザ操作・スクリーンショット取得が動作すること）
-- [ ] GiTにコミット（コメントは日本語）
 
 ## 12. Agent Skill「browser-verify」の作成
 
-- [ ] `.claude/skills/browser-verify/SKILL.md` を作成
-- [ ] Skill内容の定義:
-  - [ ] chrome-devtools-mcp でブラウザを自動操作する手順
-  - [ ] 正常系テストシナリオ（アップロード→解析→編集→保存→履歴確認）
-  - [ ] 異常系テストシナリオ（不正ファイル形式・サイズ超過・存在しないID等）
-  - [ ] スクリーンショットを `docs/evidence/` に保存する手順
-  - [ ] 検証レポート `docs/evidence/REPORT.md` の生成フォーマット定義
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `.claude/skills/browser-verify/SKILL.md` を作成
+- [x] Skill内容の定義:
+  - [x] chrome-devtools-mcp でブラウザを自動操作する手順
+  - [x] 正常系テストシナリオ（アップロード→解析→編集→保存→履歴確認）
+  - [x] 異常系テストシナリオ（不正ファイル形式・サイズ超過・存在しないID等）
+  - [x] スクリーンショットを `docs/evidence/` に保存する手順
+  - [x] 検証レポート `docs/evidence/REPORT.md` の生成フォーマット定義
 
 ## 13. 自動検証の実行
 
-- [ ] Backend + Frontend を起動
-- [ ] `/browser-verify` Skill を実行
-- [ ] 検証レポート (`docs/evidence/REPORT.md`) の確認
-- [ ] 不具合があれば修正し再検証
+- [x] Backend + Frontend を起動
+- [x] `/browser-verify` Skill を実行
+- [x] 検証レポート (`docs/evidence/REPORT.md`) の確認
+- [x] 不具合があれば修正し再検証
+- [x] GiTにコミット（コメントは日本語）

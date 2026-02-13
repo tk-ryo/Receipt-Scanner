@@ -5,8 +5,23 @@ from pathlib import Path
 
 import anthropic
 
-from app.config import ANTHROPIC_API_KEY, VISION_MODEL
+from app.config import ANTHROPIC_API_KEY, MOCK_VISION, VISION_MODEL
 from app.schemas.receipt import VisionResponse
+
+MOCK_RESPONSE = {
+    "store_name": "テストマート 渋谷店",
+    "date": "2026-02-10",
+    "total_amount": 1580,
+    "tax": 143,
+    "items": [
+        {"name": "おにぎり 鮭", "quantity": 2, "price": 150},
+        {"name": "緑茶 500ml", "quantity": 1, "price": 130},
+        {"name": "サンドイッチ", "quantity": 1, "price": 380},
+        {"name": "ヨーグルト", "quantity": 3, "price": 120},
+    ],
+    "payment_method": "クレジットカード",
+    "category": "食費",
+}
 
 PROMPT = """このレシート画像から以下の情報をJSON形式で抽出してください。
 
@@ -67,6 +82,10 @@ async def analyze_receipt(image_path: str) -> tuple[VisionResponse, str]:
     Returns:
         (VisionResponse, raw_response): 解析結果と生レスポンス文字列
     """
+    if MOCK_VISION:
+        raw = json.dumps(MOCK_RESPONSE, ensure_ascii=False)
+        return VisionResponse.model_validate(MOCK_RESPONSE), raw
+
     if not ANTHROPIC_API_KEY:
         raise ValueError("ANTHROPIC_API_KEY が設定されていません")
 
