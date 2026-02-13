@@ -14,5 +14,7 @@ VISION_MODEL = os.getenv("VISION_MODEL", "claude-sonnet-4-20250514")
 
 DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'receipts.db'}")
 
+CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
