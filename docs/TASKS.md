@@ -52,12 +52,12 @@
 
 ## 7. Frontend: 画像アップロード
 
-- [ ] `types/receipt.ts`: TypeScript 型定義
-- [ ] `api/receipts.ts`: API呼び出し関数群
-- [ ] `components/receipt/ImageUploader.tsx`: D&D + ファイル選択 UI
-- [ ] `components/receipt/ReceiptPreview.tsx`: 画像プレビュー表示
-- [ ] `hooks/useReceiptUpload.ts`: アップロード状態管理フック
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `types/receipt.ts`: TypeScript 型定義
+- [x] `api/receipts.ts`: API呼び出し関数群
+- [x] `components/receipt/ImageUploader.tsx`: D&D + ファイル選択 UI
+- [x] `components/receipt/ReceiptPreview.tsx`: 画像プレビュー表示
+- [x] `hooks/useReceiptUpload.ts`: アップロード状態管理フック
+- [x] GiTにコミット（コメントは日本語）
 
 ## 8. Frontend: 解析結果表示
 
