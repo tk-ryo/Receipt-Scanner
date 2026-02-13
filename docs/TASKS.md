@@ -37,10 +37,10 @@
 
 ## 5. スキャンAPI完成（結合）
 
-- [ ] `POST /api/receipts/scan`: 画像保存 + Vision解析 + DB保存を結合
-- [ ] `services/receipt_service.py`: create 操作実装
-- [ ] Swagger UI で動作確認
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `POST /api/receipts/scan`: 画像保存 + Vision解析 + DB保存を結合
+- [x] `services/receipt_service.py`: create 操作実装
+- [x] Swagger UI で動作確認
+- [x] GiTにコミット（コメントは日本語）
 
 ## 6. CRUD API
 
