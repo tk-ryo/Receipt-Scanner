@@ -61,12 +61,12 @@
 
 ## 8. Frontend: 解析結果表示
 
-- [ ] `components/receipt/AnalysisLoading.tsx`: スケルトンUI
-- [ ] `components/receipt/AnalysisResult.tsx`: カード形式の結果表示
-- [ ] `components/layout/Header.tsx`: アプリヘッダー
-- [ ] `components/layout/PageContainer.tsx`: ページコンテナ
-- [ ] `pages/ScanPage.tsx`: メイン画面（アップロード→解析→結果表示）
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `components/receipt/AnalysisLoading.tsx`: スケルトンUI
+- [x] `components/receipt/AnalysisResult.tsx`: カード形式の結果表示
+- [x] `components/layout/Header.tsx`: アプリヘッダー
+- [x] `components/layout/PageContainer.tsx`: ページコンテナ
+- [x] `pages/ScanPage.tsx`: メイン画面（アップロード→解析→結果表示）
+- [x] GiTにコミット（コメントは日本語）
 
 ## 9. Frontend: 編集フォーム・保存
 
