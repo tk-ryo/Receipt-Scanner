@@ -22,11 +22,11 @@
 
 ## 3. 画像アップロードAPI
 
-- [ ] `services/image_service.py`: MIMEタイプ検証・UUID名生成・保存
-- [ ] `routers/receipts.py`: `POST /api/receipts/scan` エンドポイント（ファイル受付部分）
-- [ ] `main.py`: `/uploads` StaticFiles マウント
-- [ ] `uploads/` ディレクトリ作成
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `services/image_service.py`: MIMEタイプ検証・UUID名生成・保存
+- [x] `routers/receipts.py`: `POST /api/receipts/scan` エンドポイント（ファイル受付部分）
+- [x] `main.py`: `/uploads` StaticFiles マウント
+- [x] `uploads/` ディレクトリ作成
+- [x] GiTにコミット（コメントは日本語）
 
 ## 4. Claude Vision API 連携
 
