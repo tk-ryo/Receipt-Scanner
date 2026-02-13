@@ -1,18 +1,35 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/layout/Header";
 import PageContainer from "@/components/layout/PageContainer";
 import AnalysisLoading from "@/components/receipt/AnalysisLoading";
 import AnalysisResult from "@/components/receipt/AnalysisResult";
 import ImageUploader from "@/components/receipt/ImageUploader";
+import ReceiptEditForm from "@/components/receipt/ReceiptEditForm";
 import ReceiptPreview from "@/components/receipt/ReceiptPreview";
 import { useReceiptUpload } from "@/hooks/useReceiptUpload";
-import { Loader2, RotateCcw, ScanLine } from "lucide-react";
+import type { Receipt } from "@/types/receipt";
+import { Loader2, Pencil, RotateCcw, ScanLine } from "lucide-react";
 
 export default function ScanPage() {
   const { status, receipt, error, file, previewUrl, selectFile, upload, reset } =
     useReceiptUpload();
+  const [editing, setEditing] = useState(false);
+  const [currentReceipt, setCurrentReceipt] = useState<Receipt | null>(null);
 
+  const displayReceipt = currentReceipt ?? receipt;
   const isProcessing = status === "uploading" || status === "analyzing";
+
+  const handleScanReset = () => {
+    reset();
+    setEditing(false);
+    setCurrentReceipt(null);
+  };
+
+  const handleSaved = (updated: Receipt) => {
+    setCurrentReceipt(updated);
+    setEditing(false);
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -37,7 +54,7 @@ export default function ScanPage() {
                   <ScanLine className="h-4 w-4" />
                   スキャン開始
                 </Button>
-                <Button variant="outline" onClick={reset}>
+                <Button variant="outline" onClick={handleScanReset}>
                   <RotateCcw className="h-4 w-4" />
                   やり直す
                 </Button>
@@ -52,10 +69,22 @@ export default function ScanPage() {
             )}
 
             {status === "done" && (
-              <Button variant="outline" onClick={reset} className="w-full">
-                <RotateCcw className="h-4 w-4" />
-                新しいレシートをスキャン
-              </Button>
+              <div className="flex gap-2">
+                {!editing && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setEditing(true)}
+                    className="flex-1"
+                  >
+                    <Pencil className="h-4 w-4" />
+                    編集
+                  </Button>
+                )}
+                <Button variant="outline" onClick={handleScanReset} className="flex-1">
+                  <RotateCcw className="h-4 w-4" />
+                  新しいレシートをスキャン
+                </Button>
+              </div>
             )}
 
             {error && (
@@ -65,11 +94,17 @@ export default function ScanPage() {
             )}
           </div>
 
-          {/* 右カラム: 解析結果 */}
+          {/* 右カラム: 解析結果 / 編集フォーム */}
           <div>
             {isProcessing && <AnalysisLoading />}
-            {status === "done" && receipt && (
-              <AnalysisResult receipt={receipt} />
+            {status === "done" && displayReceipt && !editing && (
+              <AnalysisResult receipt={displayReceipt} />
+            )}
+            {status === "done" && displayReceipt && editing && (
+              <ReceiptEditForm
+                receipt={displayReceipt}
+                onSaved={handleSaved}
+              />
             )}
             {status === "idle" && !file && (
               <div className="flex h-full items-center justify-center rounded-lg border border-dashed p-8">

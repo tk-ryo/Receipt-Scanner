@@ -70,11 +70,11 @@
 
 ## 9. Frontend: 編集フォーム・保存
 
-- [ ] `components/receipt/ReceiptEditForm.tsx`: 各フィールド編集フォーム
-- [ ] `components/receipt/ItemsTable.tsx`: 品目テーブル（行追加・削除・編集）
-- [ ] `hooks/useReceiptEdit.ts`: 編集状態管理・保存フック
-- [ ] Toast通知（保存成功・エラー）
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `components/receipt/ReceiptEditForm.tsx`: 各フィールド編集フォーム
+- [x] `components/receipt/ItemsTable.tsx`: 品目テーブル（行追加・削除・編集）
+- [x] `hooks/useReceiptEdit.ts`: 編集状態管理・保存フック
+- [x] Toast通知（保存成功・エラー）
+- [x] GiTにコミット（コメントは日本語）
 
 ## 10. Frontend: 履歴・詳細画面
 
