@@ -1,11 +1,17 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
 from sqlalchemy.orm import Session
 
 from app.config import UPLOAD_DIR
 from app.database import get_db
-from app.schemas.receipt import ReceiptResponse
+from app.schemas.receipt import ReceiptListResponse, ReceiptResponse, ReceiptUpdate
 from app.services.image_service import save_image
-from app.services.receipt_service import create_receipt
+from app.services.receipt_service import (
+    create_receipt,
+    delete_receipt,
+    get_receipt,
+    get_receipts,
+    update_receipt,
+)
 from app.services.vision_service import analyze_receipt
 
 router = APIRouter(prefix="/receipts", tags=["receipts"])
@@ -33,3 +39,41 @@ async def scan_receipt(file: UploadFile, db: Session = Depends(get_db)):
     receipt = create_receipt(db, image_path, vision, raw_response)
 
     return receipt
+
+
+@router.get("", response_model=ReceiptListResponse)
+def list_receipts(
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+):
+    """レシート一覧を取得する（ページネーション対応）。"""
+    items, total = get_receipts(db, skip=skip, limit=limit)
+    return ReceiptListResponse(items=items, total=total)
+
+
+@router.get("/{receipt_id}", response_model=ReceiptResponse)
+def read_receipt(receipt_id: int, db: Session = Depends(get_db)):
+    """レシート詳細を取得する。"""
+    receipt = get_receipt(db, receipt_id)
+    if not receipt:
+        raise HTTPException(status_code=404, detail="レシートが見つかりません")
+    return receipt
+
+
+@router.put("/{receipt_id}", response_model=ReceiptResponse)
+def edit_receipt(receipt_id: int, data: ReceiptUpdate, db: Session = Depends(get_db)):
+    """レシートを更新する（品目の追加・削除・変更含む）。"""
+    receipt = get_receipt(db, receipt_id)
+    if not receipt:
+        raise HTTPException(status_code=404, detail="レシートが見つかりません")
+    return update_receipt(db, receipt, data)
+
+
+@router.delete("/{receipt_id}", status_code=204)
+def remove_receipt(receipt_id: int, db: Session = Depends(get_db)):
+    """レシートを削除する（画像ファイルも削除）。"""
+    receipt = get_receipt(db, receipt_id)
+    if not receipt:
+        raise HTTPException(status_code=404, detail="レシートが見つかりません")
+    delete_receipt(db, receipt, UPLOAD_DIR)

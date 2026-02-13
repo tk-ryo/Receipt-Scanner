@@ -44,11 +44,11 @@
 
 ## 6. CRUD API
 
-- [ ] `GET /api/receipts`: 一覧取得（ページネーション対応）
-- [ ] `GET /api/receipts/{id}`: 詳細取得
-- [ ] `PUT /api/receipts/{id}`: 更新（品目の追加・削除・変更含む）
-- [ ] `DELETE /api/receipts/{id}`: 削除（画像ファイルも削除）
-- [ ] GiTにコミット（コメントは日本語）
+- [x] `GET /api/receipts`: 一覧取得（ページネーション対応）
+- [x] `GET /api/receipts/{id}`: 詳細取得
+- [x] `PUT /api/receipts/{id}`: 更新（品目の追加・削除・変更含む）
+- [x] `DELETE /api/receipts/{id}`: 削除（画像ファイルも削除）
+- [x] GiTにコミット（コメントは日本語）
 
 ## 7. Frontend: 画像アップロード
 
