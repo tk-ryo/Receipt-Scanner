@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from app.config import UPLOAD_DIR
 from app.database import get_db
 from app.schemas.receipt import ReceiptListResponse, ReceiptResponse, ReceiptUpdate
+from app.services.category_service import classify_by_items
 from app.services.export_service import generate_csv
 from app.services.image_service import generate_thumbnail, save_image
 from app.services.receipt_service import (
@@ -39,10 +40,17 @@ async def scan_receipt(file: UploadFile, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI解析中にエラーが発生しました: {e}")
 
-    # 3. サムネイル生成
+    # 3. カテゴリ補完（Vision API が null の場合）
+    if not vision.category and vision.items:
+        items_dicts = [item.model_dump() for item in vision.items]
+        inferred = classify_by_items(items_dicts)
+        if inferred:
+            vision.category = inferred
+
+    # 4. サムネイル生成
     thumbnail_path = generate_thumbnail(image_path)
 
-    # 4. DB保存
+    # 5. DB保存
     receipt = create_receipt(db, image_path, vision, raw_response, thumbnail_path=thumbnail_path)
 
     return receipt

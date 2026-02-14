@@ -53,7 +53,7 @@
 - [x] `frontend/src/pages/HistoryPage.tsx`: 「CSVエクスポート」ボタン追加（現在のフィルタ条件を適用）
 - [x] Backend テスト: CSV 生成ロジックのテスト追加
 - [ ] 動作確認（CSV ダウンロード → Excel で開いて文字化けなし確認）
-- [ ] Git にコミット
+- [x] Git にコミット
 
 ### Phase 2 完了チェック
 
@@ -67,11 +67,11 @@
 
 ### 3-1. カテゴリ自動分類強化
 
-- [ ] `backend/app/config.py`: `CATEGORIES` 定数リスト追加
-- [ ] `backend/app/services/vision_service.py`: プロンプト改善（カテゴリ判定基準を詳細に指示）
-- [ ] `backend/app/services/category_service.py`: 新規作成 — `classify_by_items(items)` キーワード辞書による品目→カテゴリ補助分類
-- [ ] `backend/app/routers/receipts.py`: `scan_receipt` で Vision API が `category=null` の場合に `category_service` で補完
-- [ ] Backend テスト: カテゴリ分類ロジックのテスト追加
+- [x] `backend/app/config.py`: `CATEGORIES` 定数リスト追加
+- [x] `backend/app/services/vision_service.py`: プロンプト改善（カテゴリ判定基準を詳細に指示）
+- [x] `backend/app/services/category_service.py`: 新規作成 — `classify_by_items(items)` キーワード辞書による品目→カテゴリ補助分類
+- [x] `backend/app/routers/receipts.py`: `scan_receipt` で Vision API が `category=null` の場合に `category_service` で補完
+- [x] Backend テスト: カテゴリ分類ロジックのテスト追加
 - [ ] 動作確認（カテゴリ null のレシートで補完が動作すること）
 - [ ] Git にコミット
 

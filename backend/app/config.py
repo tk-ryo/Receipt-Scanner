@@ -21,3 +21,21 @@ CORS_ORIGINS = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
 
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 ALLOWED_MIME_TYPES = {"image/jpeg", "image/png", "image/webp"}
+
+CATEGORIES = [
+    "食費",
+    "交通費",
+    "日用品",
+    "医療費",
+    "通信費",
+    "光熱費",
+    "交際費",
+    "衣服・美容",
+    "教育・書籍",
+    "娯楽・趣味",
+    "住居費",
+    "保険",
+    "税金",
+    "雑費",
+    "その他",
+]
