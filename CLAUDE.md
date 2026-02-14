@@ -95,12 +95,3 @@ cd frontend && npm run build
 - 一括アップロード時は Vision API を順次呼出（レート制限考慮）
 - サムネイルは `uploads/thumbs/` に保存、Receipt テーブルの `thumbnail_path` で参照
 
-## 詳細ドキュメント
-
-関連する作業を行う際に必要に応じて参照すること（常時読み込み不要）。
-
-| ファイル | 参照タイミング |
-|---|---|
-| `docs/rules/code-style.md` | コード追加・変更時 |
-| `docs/rules/testing.md` | テスト追加・変更時 |
-| `docs/rules/security.md` | セキュリティに関わる変更時 |
