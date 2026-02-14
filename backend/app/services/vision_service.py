@@ -136,6 +136,8 @@ async def analyze_receipt(image_path: str) -> tuple[VisionResponse, str]:
 
     raw_text = message.content[0].text
     parsed = _extract_json(raw_text)
+    if parsed.get("items") is None:
+        parsed["items"] = []
     vision_response = VisionResponse.model_validate(parsed)
 
     return vision_response, raw_text

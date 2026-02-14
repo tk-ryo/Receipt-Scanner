@@ -90,3 +90,29 @@
 
 ## 総合判定
 ✅ 全テスト合格
+
+---
+
+## 追加検証: API レベル動作確認 (2026-02-14)
+
+### 環境
+- OS: Debian 12 (bookworm) / WSL2
+- Python: 3.12.12, Node.js: v20.20.0
+- 検証方法: curl + pytest (18/18 passed)
+
+### 検証結果
+
+| # | 機能 | 結果 | 確認内容 |
+|---|---|---|---|
+| 2-1 | エラーハンドリング | OK | 422/404 レスポンス・日本語メッセージ確認 |
+| 2-2 | フィルタ/ソート | OK | category/date/amount/search/sort 全パターン |
+| 2-3 | サムネイル | OK | thumbnail_path 生成・画像配信 (200) |
+| 2-4 | CSVエクスポート | OK | BOM付きUTF-8、フィルタ付きエクスポート |
+| 3-1 | カテゴリ自動分類 | OK | 食費/日用品/混在/不明 全パターン |
+
+### 修正事項
+
+| # | 内容 | ファイル |
+|---|---|---|
+| 1 | テスト用 SQLite :memory: で StaticPool 未使用によりテーブル不在エラー | `backend/tests/conftest.py` |
+| 2 | Vision API が items=null を返した際の VisionResponse パースエラー | `backend/app/services/vision_service.py` |
