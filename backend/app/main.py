@@ -9,7 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from app.config import CORS_ORIGINS, UPLOAD_DIR
 from app.database import engine
 from app.models.receipt import Base
-from app.routers import receipts
+from app.routers import receipts, summary
 
 logger = logging.getLogger(__name__)
 
@@ -51,3 +51,4 @@ async def general_exception_handler(request: Request, exc: Exception):
 app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
 
 app.include_router(receipts.router, prefix="/api")
+app.include_router(summary.router, prefix="/api")
