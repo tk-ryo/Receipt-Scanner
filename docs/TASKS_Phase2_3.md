@@ -110,7 +110,7 @@
 
 ### Phase 3 完了チェック
 
-- [ ] `/browser-verify` Skill で Phase 3 機能の E2E 検証
-- [ ] 検証レポート更新
-- [ ] CLAUDE.md の最終確認・更新
-- [ ] Git にコミット
+- [x] `/browser-verify` Skill で Phase 3 機能の E2E 検証
+- [x] 検証レポート更新
+- [x] CLAUDE.md の最終確認・更新（変更不要 — Phase 3 内容は既に反映済）
+- [x] Git にコミット
