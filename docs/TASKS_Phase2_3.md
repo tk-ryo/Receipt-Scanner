@@ -57,7 +57,7 @@
 
 ### Phase 2 完了チェック
 
-- [ ] `/browser-verify` Skill で Phase 2 機能の E2E 検証（※Chrome 未インストールのためブラウザ検証は保留、API レベル検証は完了）
+- [x] `/browser-verify` Skill で Phase 2 機能の E2E 検証（全7テスト合格、スクリーンショット保存済）
 - [x] 検証レポート更新
 - [ ] Git にコミット
 
