@@ -97,10 +97,10 @@ cd frontend && npm run build
 
 ## 詳細ドキュメント
 
-タスク開始前に関連ファイルを読んでから作業すること。
+関連する作業を行う際に必要に応じて参照すること（常時読み込み不要）。
 
-| ファイル | 内容 |
+| ファイル | 参照タイミング |
 |---|---|
-| `.claude/rules/code-style.md` | ディレクトリ責務・命名規則・依存方向のルール |
-| `.claude/rules/testing.md` | テストフレームワーク・ディレクトリ構成・テストの書き方 |
-| `.claude/rules/security.md` | APIキー管理・ファイルアップロード・CORS等のセキュリティ方針 |
+| `docs/rules/code-style.md` | コード追加・変更時 |
+| `docs/rules/testing.md` | テスト追加・変更時 |
+| `docs/rules/security.md` | セキュリティに関わる変更時 |

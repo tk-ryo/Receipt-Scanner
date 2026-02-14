@@ -73,7 +73,7 @@
 - [x] `backend/app/routers/receipts.py`: `scan_receipt` で Vision API が `category=null` の場合に `category_service` で補完
 - [x] Backend テスト: カテゴリ分類ロジックのテスト追加
 - [ ] 動作確認（カテゴリ null のレシートで補完が動作すること）
-- [ ] Git にコミット
+- [x] Git にコミット
 
 ### 3-2. 月次サマリーダッシュボード
 
