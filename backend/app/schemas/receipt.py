@@ -41,6 +41,7 @@ class ReceiptUpdate(ReceiptBase):
 class ReceiptResponse(ReceiptBase):
     id: int
     image_path: str
+    thumbnail_path: str | None = None
     items: list[ReceiptItemResponse] = []
     created_at: datetime.datetime
     updated_at: datetime.datetime

@@ -12,6 +12,7 @@ def create_receipt(
     image_path: str,
     vision: VisionResponse,
     raw_response: str,
+    thumbnail_path: str | None = None,
 ) -> Receipt:
     """解析結果からレシートをDBに保存する。"""
     receipt = Receipt(
@@ -22,6 +23,7 @@ def create_receipt(
         payment_method=vision.payment_method,
         category=vision.category,
         image_path=image_path,
+        thumbnail_path=thumbnail_path,
         raw_response=raw_response,
     )
     for item_data in vision.items:

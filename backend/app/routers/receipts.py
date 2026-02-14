@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.config import UPLOAD_DIR
 from app.database import get_db
 from app.schemas.receipt import ReceiptListResponse, ReceiptResponse, ReceiptUpdate
-from app.services.image_service import save_image
+from app.services.image_service import generate_thumbnail, save_image
 from app.services.receipt_service import (
     create_receipt,
     delete_receipt,
@@ -37,8 +37,11 @@ async def scan_receipt(file: UploadFile, db: Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"AI解析中にエラーが発生しました: {e}")
 
-    # 3. DB保存
-    receipt = create_receipt(db, image_path, vision, raw_response)
+    # 3. サムネイル生成
+    thumbnail_path = generate_thumbnail(image_path)
+
+    # 4. DB保存
+    receipt = create_receipt(db, image_path, vision, raw_response, thumbnail_path=thumbnail_path)
 
     return receipt
 

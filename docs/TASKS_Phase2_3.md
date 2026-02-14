@@ -26,22 +26,22 @@
 - [x] `frontend/src/pages/HistoryPage.tsx`: `ReceiptFilters` コンポーネント配置
 - [x] Backend テスト: フィルタ/ソートのクエリテスト追加
 - [ ] 動作確認（Swagger UI + ブラウザ）
-- [ ] Git にコミット
+- [x] Git にコミット
 
 ### 2-3. サムネイル表示
 
-- [ ] `backend/requirements.txt`: `Pillow` 追加
-- [ ] `backend/app/config.py`: `THUMBNAIL_DIR` 定数追加
-- [ ] `backend/app/models/receipt.py`: `thumbnail_path` カラム追加（Text, nullable）
-- [ ] `backend/app/schemas/receipt.py`: `ReceiptResponse` に `thumbnail_path` 追加
-- [ ] `backend/app/services/image_service.py`: `generate_thumbnail` 関数追加（Pillow で 200x200 リサイズ、JPEG 保存）
-- [ ] `backend/app/services/receipt_service.py`: `create_receipt` に `thumbnail_path` パラメータ追加
-- [ ] `backend/app/routers/receipts.py`: `scan_receipt` でサムネイル生成を呼出
-- [ ] DB スキーマ更新（開発段階では DB 再作成で対応）
-- [ ] `frontend/src/types/receipt.ts`: `Receipt` に `thumbnail_path` 追加
-- [ ] `frontend/src/pages/HistoryPage.tsx`: `ReceiptCard` にサムネイル画像表示
-- [ ] `frontend/src/components/receipt/ImageLightbox.tsx`: 新規作成 — shadcn/ui Dialog ベースのフルサイズ画像プレビュー
-- [ ] `frontend/src/pages/ReceiptDetailPage.tsx`: 画像クリックでライトボックス表示
+- [x] `backend/requirements.txt`: `Pillow` 追加
+- [x] `backend/app/config.py`: `THUMBNAIL_DIR` 定数追加
+- [x] `backend/app/models/receipt.py`: `thumbnail_path` カラム追加（Text, nullable）
+- [x] `backend/app/schemas/receipt.py`: `ReceiptResponse` に `thumbnail_path` 追加
+- [x] `backend/app/services/image_service.py`: `generate_thumbnail` 関数追加（Pillow で 200x200 リサイズ、JPEG 保存）
+- [x] `backend/app/services/receipt_service.py`: `create_receipt` に `thumbnail_path` パラメータ追加
+- [x] `backend/app/routers/receipts.py`: `scan_receipt` でサムネイル生成を呼出
+- [x] DB スキーマ更新（開発段階では DB 再作成で対応）
+- [x] `frontend/src/types/receipt.ts`: `Receipt` に `thumbnail_path` 追加
+- [x] `frontend/src/pages/HistoryPage.tsx`: `ReceiptCard` にサムネイル画像表示
+- [x] `frontend/src/components/receipt/ImageLightbox.tsx`: 新規作成 — shadcn/ui Dialog ベースのフルサイズ画像プレビュー
+- [x] `frontend/src/pages/ReceiptDetailPage.tsx`: 画像クリックでライトボックス表示
 - [ ] 動作確認（Swagger UI + ブラウザ）
 - [ ] Git にコミット
 

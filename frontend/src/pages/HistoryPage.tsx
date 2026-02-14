@@ -16,10 +16,24 @@ function formatAmount(amount: number | null): string {
 }
 
 function ReceiptCard({ receipt }: { receipt: Receipt }) {
+  const thumbnailUrl = receipt.thumbnail_path
+    ? `http://localhost:8000${receipt.thumbnail_path}`
+    : null;
+
   return (
     <Link to={`/receipts/${receipt.id}`}>
       <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
-        <CardContent className="flex items-center justify-between py-4">
+        <CardContent className="flex items-center gap-3 py-4">
+          {/* サムネイル */}
+          {thumbnailUrl && (
+            <div className="shrink-0 h-14 w-14 overflow-hidden rounded border bg-muted">
+              <img
+                src={thumbnailUrl}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            </div>
+          )}
           <div className="min-w-0 flex-1">
             <p className="font-medium truncate">
               {receipt.store_name ?? "店名不明"}

@@ -24,6 +24,7 @@ export interface Receipt {
   payment_method: string | null;
   category: string | null;
   image_path: string;
+  thumbnail_path: string | null;
   items: ReceiptItem[];
   created_at: string;
   updated_at: string;

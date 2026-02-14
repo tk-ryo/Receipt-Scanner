@@ -17,6 +17,7 @@ class Receipt(Base):
     payment_method = Column(Text, nullable=True)
     category = Column(Text, nullable=True)
     image_path = Column(Text, nullable=False)
+    thumbnail_path = Column(Text, nullable=True)
     raw_response = Column(Text, nullable=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
