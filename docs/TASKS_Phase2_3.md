@@ -13,18 +13,18 @@
 - [x] `frontend/src/pages/ReceiptDetailPage.tsx`: エラー表示にリトライボタン追加
 - [x] Backend テスト: エラーハンドラの動作確認テスト追加
 - [ ] 動作確認（Swagger UI + ブラウザ）※Python環境未構築のため実行保留
-- [ ] Git にコミット
+- [x] Git にコミット
 
 ### 2-2. 履歴ソート・フィルタ
 
-- [ ] `backend/app/services/receipt_service.py`: `get_receipts` にフィルタ/ソートパラメータ追加（sort_by, sort_order, date_from, date_to, category, amount_min, amount_max, search）
-- [ ] `backend/app/routers/receipts.py`: `list_receipts` にクエリパラメータ追加
-- [ ] `frontend/src/types/receipt.ts`: `ReceiptFilterParams` 型追加
-- [ ] `frontend/src/api/receipts.ts`: `getReceipts` にフィルタパラメータ引数追加
-- [ ] `frontend/src/hooks/useReceipts.ts`: フィルタ状態管理・`setFilters` 公開・フィルタ変更時に page=1 リセット
-- [ ] `frontend/src/components/receipt/ReceiptFilters.tsx`: 新規作成 — 折りたたみ式フィルタパネル（日付範囲、カテゴリ、金額範囲、店名検索、ソート）
-- [ ] `frontend/src/pages/HistoryPage.tsx`: `ReceiptFilters` コンポーネント配置
-- [ ] Backend テスト: フィルタ/ソートのクエリテスト追加
+- [x] `backend/app/services/receipt_service.py`: `get_receipts` にフィルタ/ソートパラメータ追加（sort_by, sort_order, date_from, date_to, category, amount_min, amount_max, search）
+- [x] `backend/app/routers/receipts.py`: `list_receipts` にクエリパラメータ追加
+- [x] `frontend/src/types/receipt.ts`: `ReceiptFilterParams` 型追加
+- [x] `frontend/src/api/receipts.ts`: `getReceipts` にフィルタパラメータ引数追加
+- [x] `frontend/src/hooks/useReceipts.ts`: フィルタ状態管理・`setFilters` 公開・フィルタ変更時に page=1 リセット
+- [x] `frontend/src/components/receipt/ReceiptFilters.tsx`: 新規作成 — 折りたたみ式フィルタパネル（日付範囲、カテゴリ、金額範囲、店名検索、ソート）
+- [x] `frontend/src/pages/HistoryPage.tsx`: `ReceiptFilters` コンポーネント配置
+- [x] Backend テスト: フィルタ/ソートのクエリテスト追加
 - [ ] 動作確認（Swagger UI + ブラウザ）
 - [ ] Git にコミット
 

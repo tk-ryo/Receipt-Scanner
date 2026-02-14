@@ -43,3 +43,16 @@ export interface ReceiptListResponse {
   items: Receipt[];
   total: number;
 }
+
+// --- Filter ---
+
+export interface ReceiptFilterParams {
+  sort_by?: string;
+  sort_order?: "asc" | "desc";
+  date_from?: string;
+  date_to?: string;
+  category?: string;
+  amount_min?: number;
+  amount_max?: number;
+  search?: string;
+}

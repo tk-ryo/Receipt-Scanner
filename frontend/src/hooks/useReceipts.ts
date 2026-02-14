@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { getReceipts } from "@/api/receipts";
-import type { Receipt } from "@/types/receipt";
+import type { Receipt, ReceiptFilterParams } from "@/types/receipt";
 
 interface UseReceiptsReturn {
   items: Receipt[];
@@ -9,6 +9,8 @@ interface UseReceiptsReturn {
   error: string | null;
   page: number;
   setPage: (page: number) => void;
+  filters: ReceiptFilterParams;
+  setFilters: (filters: ReceiptFilterParams) => void;
   refresh: () => void;
 }
 
@@ -20,13 +22,19 @@ export function useReceipts(): UseReceiptsReturn {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
+  const [filters, setFiltersState] = useState<ReceiptFilterParams>({});
+
+  const setFilters = useCallback((newFilters: ReceiptFilterParams) => {
+    setFiltersState(newFilters);
+    setPage(1);
+  }, []);
 
   const fetch = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const skip = (page - 1) * PER_PAGE;
-      const res = await getReceipts(skip, PER_PAGE);
+      const res = await getReceipts(skip, PER_PAGE, filters);
       setItems(res.items);
       setTotal(res.total);
     } catch (err) {
@@ -36,11 +44,11 @@ export function useReceipts(): UseReceiptsReturn {
     } finally {
       setLoading(false);
     }
-  }, [page]);
+  }, [page, filters]);
 
   useEffect(() => {
     fetch();
   }, [fetch]);
 
-  return { items, total, loading, error, page, setPage, refresh: fetch };
+  return { items, total, loading, error, page, setPage, filters, setFilters, refresh: fetch };
 }

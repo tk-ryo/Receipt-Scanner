@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Header from "@/components/layout/Header";
 import PageContainer from "@/components/layout/PageContainer";
+import ReceiptFilters from "@/components/receipt/ReceiptFilters";
 import { useReceipts } from "@/hooks/useReceipts";
 import type { Receipt } from "@/types/receipt";
 import { ChevronLeft, ChevronRight, Receipt as ReceiptIcon, RefreshCw } from "lucide-react";
@@ -54,7 +55,7 @@ function ReceiptCard({ receipt }: { receipt: Receipt }) {
 const PER_PAGE = 20;
 
 export default function HistoryPage() {
-  const { items, total, loading, error, page, setPage, refresh } = useReceipts();
+  const { items, total, loading, error, page, setPage, filters, setFilters, refresh } = useReceipts();
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   return (
@@ -68,6 +69,9 @@ export default function HistoryPage() {
               <p className="text-sm text-muted-foreground">{total}件</p>
             )}
           </div>
+
+          {/* フィルタ・ソート */}
+          <ReceiptFilters filters={filters} onFiltersChange={setFilters} />
 
           {/* ローディング */}
           {loading && (

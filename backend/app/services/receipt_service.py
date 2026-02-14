@@ -1,3 +1,4 @@
+from datetime import date
 from pathlib import Path
 
 from sqlalchemy.orm import Session
@@ -38,16 +39,46 @@ def create_receipt(
     return receipt
 
 
-def get_receipts(db: Session, skip: int = 0, limit: int = 20) -> tuple[list[Receipt], int]:
+def get_receipts(
+    db: Session,
+    skip: int = 0,
+    limit: int = 20,
+    sort_by: str = "created_at",
+    sort_order: str = "desc",
+    date_from: date | None = None,
+    date_to: date | None = None,
+    category: str | None = None,
+    amount_min: float | None = None,
+    amount_max: float | None = None,
+    search: str | None = None,
+) -> tuple[list[Receipt], int]:
     """レシート一覧を取得する。(items, total) を返す。"""
-    total = db.query(Receipt).count()
-    items = (
-        db.query(Receipt)
-        .order_by(Receipt.created_at.desc())
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
+    query = db.query(Receipt)
+
+    # フィルタ
+    if date_from:
+        query = query.filter(Receipt.date >= date_from)
+    if date_to:
+        query = query.filter(Receipt.date <= date_to)
+    if category:
+        query = query.filter(Receipt.category == category)
+    if amount_min is not None:
+        query = query.filter(Receipt.total_amount >= amount_min)
+    if amount_max is not None:
+        query = query.filter(Receipt.total_amount <= amount_max)
+    if search:
+        query = query.filter(Receipt.store_name.ilike(f"%{search}%"))
+
+    total = query.count()
+
+    # ソート
+    sort_column = getattr(Receipt, sort_by, Receipt.created_at)
+    if sort_order == "asc":
+        query = query.order_by(sort_column.asc())
+    else:
+        query = query.order_by(sort_column.desc())
+
+    items = query.offset(skip).limit(limit).all()
     return items, total
 
 

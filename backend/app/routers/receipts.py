@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
 from sqlalchemy.orm import Session
 
@@ -45,10 +47,30 @@ async def scan_receipt(file: UploadFile, db: Session = Depends(get_db)):
 def list_receipts(
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
+    sort_by: str = Query("created_at"),
+    sort_order: str = Query("desc"),
+    date_from: datetime.date | None = Query(None),
+    date_to: datetime.date | None = Query(None),
+    category: str | None = Query(None),
+    amount_min: float | None = Query(None),
+    amount_max: float | None = Query(None),
+    search: str | None = Query(None),
     db: Session = Depends(get_db),
 ):
-    """レシート一覧を取得する（ページネーション対応）。"""
-    items, total = get_receipts(db, skip=skip, limit=limit)
+    """レシート一覧を取得する（ページネーション・フィルタ・ソート対応）。"""
+    items, total = get_receipts(
+        db,
+        skip=skip,
+        limit=limit,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        date_from=date_from,
+        date_to=date_to,
+        category=category,
+        amount_min=amount_min,
+        amount_max=amount_max,
+        search=search,
+    )
     return ReceiptListResponse(items=items, total=total)
 
 

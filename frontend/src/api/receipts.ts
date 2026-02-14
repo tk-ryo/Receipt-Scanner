@@ -1,5 +1,5 @@
 import client from "./client";
-import type { Receipt, ReceiptListResponse, ReceiptUpdate } from "@/types/receipt";
+import type { Receipt, ReceiptFilterParams, ReceiptListResponse, ReceiptUpdate } from "@/types/receipt";
 
 export async function scanReceipt(file: File): Promise<Receipt> {
   const formData = new FormData();
@@ -8,10 +8,20 @@ export async function scanReceipt(file: File): Promise<Receipt> {
   return data;
 }
 
-export async function getReceipts(skip = 0, limit = 20): Promise<ReceiptListResponse> {
-  const { data } = await client.get<ReceiptListResponse>("/receipts", {
-    params: { skip, limit },
-  });
+export async function getReceipts(
+  skip = 0,
+  limit = 20,
+  filters?: ReceiptFilterParams,
+): Promise<ReceiptListResponse> {
+  const params: Record<string, string | number> = { skip, limit };
+  if (filters) {
+    for (const [key, value] of Object.entries(filters)) {
+      if (value !== undefined && value !== "") {
+        params[key] = value;
+      }
+    }
+  }
+  const { data } = await client.get<ReceiptListResponse>("/receipts", { params });
   return data;
 }
 
