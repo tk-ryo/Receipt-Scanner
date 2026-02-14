@@ -17,32 +17,37 @@
 | AI | Claude Vision API (claude-sonnet-4-20250514) |
 | DB | SQLite + SQLAlchemy |
 | HTTP Client | Axios |
+| 画像処理 | Pillow（サムネイル生成） |
+| チャート | recharts（月次サマリー） |
 
 ```
 Receipt-Scanner/
-├── backend/          # FastAPI アプリケーション
+├── backend/
 │   ├── app/
-│   │   ├── main.py           # エントリポイント + CORS
-│   │   ├── config.py         # 環境変数管理
-│   │   ├── database.py       # SQLAlchemy エンジン・セッション
-│   │   ├── models/           # ORM モデル (Receipt, ReceiptItem)
-│   │   ├── schemas/          # Pydantic スキーマ
-│   │   ├── routers/          # APIエンドポイント
-│   │   └── services/         # ビジネスロジック
-│   │       ├── vision_service.py   # Claude Vision API 連携
-│   │       ├── receipt_service.py  # CRUD操作
-│   │       └── image_service.py    # 画像バリデーション・保存
-│   └── uploads/              # アップロード画像保存先
-├── frontend/         # React SPA
+│   │   ├── main.py              # エントリポイント + CORS + グローバル例外ハンドラ
+│   │   ├── config.py            # 環境変数・定数管理
+│   │   ├── database.py          # SQLAlchemy エンジン・セッション
+│   │   ├── models/              # ORM モデル (Receipt, ReceiptItem)
+│   │   ├── schemas/             # Pydantic スキーマ (receipt, summary)
+│   │   ├── routers/             # APIエンドポイント (receipts, summary)
+│   │   └── services/            # ビジネスロジック
+│   │       ├── vision_service.py     # Claude Vision API 連携
+│   │       ├── receipt_service.py    # CRUD + フィルタ/ソート
+│   │       ├── image_service.py      # 画像バリデーション・保存・サムネイル生成
+│   │       ├── export_service.py     # CSV生成
+│   │       ├── category_service.py   # 品目→カテゴリ補助分類
+│   │       └── summary_service.py    # 月次集計
+│   └── uploads/                 # アップロード画像 + thumbs/
+├── frontend/
 │   └── src/
-│       ├── api/              # Axios クライアント・API関数
+│       ├── api/                 # Axios クライアント・API関数 (receipts, summary)
 │       ├── components/
-│       │   ├── ui/           # shadcn/ui (自動生成)
-│       │   ├── layout/       # Header, PageContainer
-│       │   └── receipt/      # 業務コンポーネント群
-│       ├── pages/            # ScanPage, HistoryPage, ReceiptDetailPage
-│       ├── hooks/            # カスタムフック
-│       └── types/            # 型定義
+│       │   ├── ui/              # shadcn/ui (自動生成・編集不可)
+│       │   ├── layout/          # Header, PageContainer
+│       │   └── receipt/         # 業務コンポーネント群
+│       ├── pages/               # ScanPage, HistoryPage, ReceiptDetailPage, DashboardPage
+│       ├── hooks/               # カスタムフック
+│       └── types/               # 型定義 (receipt, summary)
 └── CLAUDE.md
 ```
 
@@ -57,6 +62,13 @@ uvicorn app.main:app --reload
 
 # Frontend (port 5173)
 cd frontend && npm install && npm run dev
+```
+
+### テスト
+
+```bash
+cd backend && python -m pytest
+cd frontend && npx vitest run
 ```
 
 ### 環境変数
@@ -78,3 +90,17 @@ cd frontend && npm run build
 - Backend API のベースパスは `/api`。画像配信は `/uploads/{filename}` (StaticFiles)
 - DB全フィールド NULLABLE — Vision API が読み取れない項目を null で返す設計
 - フロントの状態遷移: idle → uploading → analyzing → done / error
+- フロントのルーティング: `/` (スキャン), `/history` (履歴), `/receipts/:id` (詳細), `/dashboard` (月次サマリー)
+- CSVエクスポートは BOM付きUTF-8（Excel互換）
+- 一括アップロード時は Vision API を順次呼出（レート制限考慮）
+- サムネイルは `uploads/thumbs/` に保存、Receipt テーブルの `thumbnail_path` で参照
+
+## 詳細ドキュメント
+
+タスク開始前に関連ファイルを読んでから作業すること。
+
+| ファイル | 内容 |
+|---|---|
+| `.claude/rules/code-style.md` | ディレクトリ責務・命名規則・依存方向のルール |
+| `.claude/rules/testing.md` | テストフレームワーク・ディレクトリ構成・テストの書き方 |
+| `.claude/rules/security.md` | APIキー管理・ファイルアップロード・CORS等のセキュリティ方針 |

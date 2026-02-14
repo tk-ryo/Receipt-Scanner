@@ -8,7 +8,7 @@ import AnalysisResult from "@/components/receipt/AnalysisResult";
 import ReceiptEditForm from "@/components/receipt/ReceiptEditForm";
 import { deleteReceipt, getReceipt } from "@/api/receipts";
 import type { Receipt } from "@/types/receipt";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ReceiptDetailPage() {
@@ -80,8 +80,17 @@ export default function ReceiptDetailPage() {
 
         {/* エラー */}
         {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
+            <span>{error}</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetch}
+              className="ml-4 shrink-0"
+            >
+              <RefreshCw className="h-4 w-4 mr-1" />
+              再試行
+            </Button>
           </div>
         )}
 

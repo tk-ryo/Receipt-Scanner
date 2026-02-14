@@ -7,7 +7,7 @@ import Header from "@/components/layout/Header";
 import PageContainer from "@/components/layout/PageContainer";
 import { useReceipts } from "@/hooks/useReceipts";
 import type { Receipt } from "@/types/receipt";
-import { ChevronLeft, ChevronRight, Receipt as ReceiptIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight, Receipt as ReceiptIcon, RefreshCw } from "lucide-react";
 
 function formatAmount(amount: number | null): string {
   if (amount == null) return "-";
@@ -54,7 +54,7 @@ function ReceiptCard({ receipt }: { receipt: Receipt }) {
 const PER_PAGE = 20;
 
 export default function HistoryPage() {
-  const { items, total, loading, error, page, setPage } = useReceipts();
+  const { items, total, loading, error, page, setPage, refresh } = useReceipts();
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   return (
@@ -80,8 +80,17 @@ export default function HistoryPage() {
 
           {/* エラー */}
           {error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-              {error}
+            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
+              <span>{error}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={refresh}
+                className="ml-4 shrink-0"
+              >
+                <RefreshCw className="h-4 w-4 mr-1" />
+                再試行
+              </Button>
             </div>
           )}
 

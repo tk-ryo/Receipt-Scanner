@@ -29,8 +29,10 @@ export function useReceipts(): UseReceiptsReturn {
       const res = await getReceipts(skip, PER_PAGE);
       setItems(res.items);
       setTotal(res.total);
-    } catch {
-      setError("レシート一覧の取得に失敗しました");
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "レシート一覧の取得に失敗しました";
+      setError(message);
     } finally {
       setLoading(false);
     }
