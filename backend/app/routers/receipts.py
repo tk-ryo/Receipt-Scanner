@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
 from fastapi.responses import StreamingResponse
@@ -6,7 +7,15 @@ from sqlalchemy.orm import Session
 
 from app.config import UPLOAD_DIR
 from app.database import get_db
-from app.schemas.receipt import ReceiptListResponse, ReceiptResponse, ReceiptUpdate
+from app.schemas.receipt import (
+    BatchScanResponse,
+    BatchScanResultItem,
+    ReceiptListResponse,
+    ReceiptResponse,
+    ReceiptUpdate,
+)
+
+logger = logging.getLogger(__name__)
 from app.services.category_service import classify_by_items
 from app.services.export_service import generate_csv
 from app.services.image_service import generate_thumbnail, save_image
@@ -54,6 +63,61 @@ async def scan_receipt(file: UploadFile, db: Session = Depends(get_db)):
     receipt = create_receipt(db, image_path, vision, raw_response, thumbnail_path=thumbnail_path)
 
     return receipt
+
+
+@router.post("/scan/batch", response_model=BatchScanResponse, status_code=201)
+async def batch_scan_receipts(
+    files: list[UploadFile],
+    db: Session = Depends(get_db),
+):
+    """複数のレシート画像を一括アップロードし、順次AI解析してDBに保存する。"""
+    results: list[BatchScanResultItem] = []
+    success_count = 0
+    error_count = 0
+
+    for file in files:
+        filename = file.filename or "unknown"
+        try:
+            # 1. 画像保存
+            image_path = await save_image(file)
+
+            # 2. Vision API で解析
+            absolute_path = str(UPLOAD_DIR.parent / image_path.lstrip("/"))
+            vision, raw_response = await analyze_receipt(absolute_path)
+
+            # 3. カテゴリ補完
+            if not vision.category and vision.items:
+                items_dicts = [item.model_dump() for item in vision.items]
+                inferred = classify_by_items(items_dicts)
+                if inferred:
+                    vision.category = inferred
+
+            # 4. サムネイル生成
+            thumbnail_path = generate_thumbnail(image_path)
+
+            # 5. DB保存
+            receipt = create_receipt(db, image_path, vision, raw_response, thumbnail_path=thumbnail_path)
+
+            results.append(BatchScanResultItem(
+                filename=filename,
+                success=True,
+                receipt=ReceiptResponse.model_validate(receipt),
+            ))
+            success_count += 1
+        except Exception as e:
+            logger.warning("Batch scan failed for %s: %s", filename, e)
+            results.append(BatchScanResultItem(
+                filename=filename,
+                success=False,
+                error=str(e),
+            ))
+            error_count += 1
+
+    return BatchScanResponse(
+        results=results,
+        success_count=success_count,
+        error_count=error_count,
+    )
 
 
 @router.get("", response_model=ReceiptListResponse)

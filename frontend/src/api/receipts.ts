@@ -1,10 +1,19 @@
 import client from "./client";
-import type { Receipt, ReceiptFilterParams, ReceiptListResponse, ReceiptUpdate } from "@/types/receipt";
+import type { BatchScanResult, Receipt, ReceiptFilterParams, ReceiptListResponse, ReceiptUpdate } from "@/types/receipt";
 
 export async function scanReceipt(file: File): Promise<Receipt> {
   const formData = new FormData();
   formData.append("file", file);
   const { data } = await client.post<Receipt>("/receipts/scan", formData);
+  return data;
+}
+
+export async function batchScanReceipts(files: File[]): Promise<BatchScanResult> {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("files", file);
+  }
+  const { data } = await client.post<BatchScanResult>("/receipts/scan/batch", formData);
   return data;
 }
 

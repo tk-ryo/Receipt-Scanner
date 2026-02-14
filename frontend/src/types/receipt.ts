@@ -45,6 +45,21 @@ export interface ReceiptListResponse {
   total: number;
 }
 
+// --- Batch Scan ---
+
+export interface BatchScanResultItem {
+  filename: string;
+  success: boolean;
+  receipt: Receipt | null;
+  error: string | null;
+}
+
+export interface BatchScanResult {
+  results: BatchScanResultItem[];
+  success_count: number;
+  error_count: number;
+}
+
 // --- Filter ---
 
 export interface ReceiptFilterParams {

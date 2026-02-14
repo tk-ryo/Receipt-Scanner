@@ -59,7 +59,7 @@
 
 - [x] `/browser-verify` Skill で Phase 2 機能の E2E 検証（全7テスト合格、スクリーンショット保存済）
 - [x] 検証レポート更新
-- [ ] Git にコミット
+- [x] Git にコミット
 
 ---
 
@@ -77,36 +77,36 @@
 
 ### 3-2. 月次サマリーダッシュボード
 
-- [ ] `backend/app/schemas/summary.py`: 新規作成 — `MonthlySummaryResponse`, `CategorySummary`, `MonthOption`, `MonthlyListResponse`
-- [ ] `backend/app/services/summary_service.py`: 新規作成 — `get_monthly_summary(db, year, month)` GROUP BY category + SUM
-- [ ] `backend/app/routers/summary.py`: 新規作成 — `GET /api/summary/monthly`, `GET /api/summary/monthly-list`
-- [ ] `backend/app/main.py`: `summary` ルーター追加
-- [ ] `frontend/package.json`: `recharts` 追加
-- [ ] `frontend/src/types/summary.ts`: 新規作成 — `MonthlySummary`, `CategorySummary`, `MonthOption`
-- [ ] `frontend/src/api/summary.ts`: 新規作成 — `getMonthlySummary`, `getMonthlyList`
-- [ ] `frontend/src/hooks/useMonthlySummary.ts`: 新規作成 — サマリーデータ取得フック
-- [ ] `frontend/src/components/receipt/MonthlySummaryCard.tsx`: 新規作成 — 合計金額・件数表示カード
-- [ ] `frontend/src/components/receipt/CategoryPieChart.tsx`: 新規作成 — recharts PieChart ラッパー
-- [ ] `frontend/src/pages/DashboardPage.tsx`: 新規作成 — 年月セレクター + サマリーカード + 円グラフ
-- [ ] `frontend/src/App.tsx`: `/dashboard` ルート追加
-- [ ] `frontend/src/components/layout/Header.tsx`: 「ダッシュボード」ナビリンク追加
-- [ ] Backend テスト: 集計ロジックのテスト追加
-- [ ] 動作確認（Swagger UI + ブラウザ）
-- [ ] Git にコミット
+- [x] `backend/app/schemas/summary.py`: 新規作成 — `MonthlySummaryResponse`, `CategorySummary`, `MonthOption`, `MonthlyListResponse`
+- [x] `backend/app/services/summary_service.py`: 新規作成 — `get_monthly_summary(db, year, month)` GROUP BY category + SUM
+- [x] `backend/app/routers/summary.py`: 新規作成 — `GET /api/summary/monthly`, `GET /api/summary/monthly-list`
+- [x] `backend/app/main.py`: `summary` ルーター追加
+- [x] `frontend/package.json`: `recharts` 追加
+- [x] `frontend/src/types/summary.ts`: 新規作成 — `MonthlySummary`, `CategorySummary`, `MonthOption`
+- [x] `frontend/src/api/summary.ts`: 新規作成 — `getMonthlySummary`, `getMonthlyList`
+- [x] `frontend/src/hooks/useMonthlySummary.ts`: 新規作成 — サマリーデータ取得フック
+- [x] `frontend/src/components/receipt/MonthlySummaryCard.tsx`: 新規作成 — 合計金額・件数表示カード
+- [x] `frontend/src/components/receipt/CategoryPieChart.tsx`: 新規作成 — recharts PieChart ラッパー
+- [x] `frontend/src/pages/DashboardPage.tsx`: 新規作成 — 年月セレクター + サマリーカード + 円グラフ
+- [x] `frontend/src/App.tsx`: `/dashboard` ルート追加
+- [x] `frontend/src/components/layout/Header.tsx`: 「ダッシュボード」ナビリンク追加
+- [x] Backend テスト: 集計ロジックのテスト追加
+- [x] 動作確認（Swagger UI + ブラウザ）
+- [x] Git にコミット
 
 ### 3-3. 複数画像一括アップロード
 
-- [ ] `backend/app/schemas/receipt.py`: `BatchScanResultItem`, `BatchScanResponse` 追加
-- [ ] `backend/app/routers/receipts.py`: `POST /api/receipts/scan/batch` 追加（`files: list[UploadFile]` 順次処理、個別の成功/失敗を記録）
-- [ ] `frontend/src/types/receipt.ts`: `BatchScanResult`, `BatchScanResultItem` 型追加
-- [ ] `frontend/src/api/receipts.ts`: `batchScanReceipts(files: File[])` 追加
-- [ ] `frontend/src/hooks/useBatchUpload.ts`: 新規作成 — 一括アップロード専用フック（files, results, progress, status）
-- [ ] `frontend/src/components/receipt/BatchUploadProgress.tsx`: 新規作成 — 各ファイルの処理状態リスト表示
-- [ ] `frontend/src/components/receipt/ImageUploader.tsx`: `multiple` 属性追加、`onFilesSelect` コールバック対応
-- [ ] `frontend/src/pages/ScanPage.tsx`: 単一/一括モード切替UI追加
-- [ ] Backend テスト: バッチスキャンのテスト追加
-- [ ] 動作確認（複数画像アップロード → 全件処理確認）
-- [ ] Git にコミット
+- [x] `backend/app/schemas/receipt.py`: `BatchScanResultItem`, `BatchScanResponse` 追加
+- [x] `backend/app/routers/receipts.py`: `POST /api/receipts/scan/batch` 追加（`files: list[UploadFile]` 順次処理、個別の成功/失敗を記録）
+- [x] `frontend/src/types/receipt.ts`: `BatchScanResult`, `BatchScanResultItem` 型追加
+- [x] `frontend/src/api/receipts.ts`: `batchScanReceipts(files: File[])` 追加
+- [x] `frontend/src/hooks/useBatchUpload.ts`: 新規作成 — 一括アップロード専用フック（files, results, progress, status）
+- [x] `frontend/src/components/receipt/BatchUploadProgress.tsx`: 新規作成 — 各ファイルの処理状態リスト表示
+- [x] `frontend/src/components/receipt/ImageUploader.tsx`: `multiple` 属性追加、`onFilesSelect` コールバック対応
+- [x] `frontend/src/pages/ScanPage.tsx`: 単一/一括モード切替UI追加
+- [x] Backend テスト: バッチスキャンのテスト追加
+- [x] 動作確認（複数画像アップロード → 全件処理確認）
+- [x] Git にコミット
 
 ### Phase 3 完了チェック
 

@@ -58,3 +58,18 @@ class ReceiptListResponse(BaseModel):
 
 class VisionResponse(ReceiptBase):
     items: list[ReceiptItemCreate] = []
+
+
+# --- Batch Scan ---
+
+class BatchScanResultItem(BaseModel):
+    filename: str
+    success: bool
+    receipt: ReceiptResponse | None = None
+    error: str | None = None
+
+
+class BatchScanResponse(BaseModel):
+    results: list[BatchScanResultItem]
+    success_count: int
+    error_count: int
