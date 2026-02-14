@@ -1,11 +1,13 @@
 import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.config import UPLOAD_DIR
 from app.database import get_db
 from app.schemas.receipt import ReceiptListResponse, ReceiptResponse, ReceiptUpdate
+from app.services.export_service import generate_csv
 from app.services.image_service import generate_thumbnail, save_image
 from app.services.receipt_service import (
     create_receipt,
@@ -75,6 +77,41 @@ def list_receipts(
         search=search,
     )
     return ReceiptListResponse(items=items, total=total)
+
+
+@router.get("/export/csv")
+def export_csv(
+    sort_by: str = Query("created_at"),
+    sort_order: str = Query("desc"),
+    date_from: datetime.date | None = Query(None),
+    date_to: datetime.date | None = Query(None),
+    category: str | None = Query(None),
+    amount_min: float | None = Query(None),
+    amount_max: float | None = Query(None),
+    search: str | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    """フィルタ条件に合致するレシートをCSVでエクスポートする。"""
+    items, _ = get_receipts(
+        db,
+        skip=0,
+        limit=10000,
+        sort_by=sort_by,
+        sort_order=sort_order,
+        date_from=date_from,
+        date_to=date_to,
+        category=category,
+        amount_min=amount_min,
+        amount_max=amount_max,
+        search=search,
+    )
+    csv_content = generate_csv(items)
+
+    return StreamingResponse(
+        iter([csv_content]),
+        media_type="text/csv; charset=utf-8",
+        headers={"Content-Disposition": "attachment; filename=receipts.csv"},
+    )
 
 
 @router.get("/{receipt_id}", response_model=ReceiptResponse)

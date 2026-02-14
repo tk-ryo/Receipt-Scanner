@@ -43,15 +43,15 @@
 - [x] `frontend/src/components/receipt/ImageLightbox.tsx`: 新規作成 — shadcn/ui Dialog ベースのフルサイズ画像プレビュー
 - [x] `frontend/src/pages/ReceiptDetailPage.tsx`: 画像クリックでライトボックス表示
 - [ ] 動作確認（Swagger UI + ブラウザ）
-- [ ] Git にコミット
+- [x] Git にコミット
 
 ### 2-4. CSVエクスポート
 
-- [ ] `backend/app/services/export_service.py`: 新規作成 — `generate_csv(receipts)` BOM付きUTF-8（カラム: ID/日付/店名/合計金額/税額/支払方法/カテゴリ/品目）
-- [ ] `backend/app/routers/receipts.py`: `GET /api/receipts/export/csv` 追加（`/{receipt_id}` より前に定義、フィルタパラメータ対応、`StreamingResponse`）
-- [ ] `frontend/src/api/receipts.ts`: `exportCsv(filters)` 関数追加（`responseType: "blob"` → ダウンロードリンク動的生成）
-- [ ] `frontend/src/pages/HistoryPage.tsx`: 「CSVエクスポート」ボタン追加（現在のフィルタ条件を適用）
-- [ ] Backend テスト: CSV 生成ロジックのテスト追加
+- [x] `backend/app/services/export_service.py`: 新規作成 — `generate_csv(receipts)` BOM付きUTF-8（カラム: ID/日付/店名/合計金額/税額/支払方法/カテゴリ/品目）
+- [x] `backend/app/routers/receipts.py`: `GET /api/receipts/export/csv` 追加（`/{receipt_id}` より前に定義、フィルタパラメータ対応、`StreamingResponse`）
+- [x] `frontend/src/api/receipts.ts`: `exportCsv(filters)` 関数追加（`responseType: "blob"` → ダウンロードリンク動的生成）
+- [x] `frontend/src/pages/HistoryPage.tsx`: 「CSVエクスポート」ボタン追加（現在のフィルタ条件を適用）
+- [x] Backend テスト: CSV 生成ロジックのテスト追加
 - [ ] 動作確認（CSV ダウンロード → Excel で開いて文字化けなし確認）
 - [ ] Git にコミット
 

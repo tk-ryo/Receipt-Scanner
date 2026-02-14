@@ -8,7 +8,9 @@ import PageContainer from "@/components/layout/PageContainer";
 import ReceiptFilters from "@/components/receipt/ReceiptFilters";
 import { useReceipts } from "@/hooks/useReceipts";
 import type { Receipt } from "@/types/receipt";
-import { ChevronLeft, ChevronRight, Receipt as ReceiptIcon, RefreshCw } from "lucide-react";
+import { exportCsv } from "@/api/receipts";
+import { ChevronLeft, ChevronRight, Download, Receipt as ReceiptIcon, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 
 function formatAmount(amount: number | null): string {
   if (amount == null) return "-";
@@ -79,9 +81,27 @@ export default function HistoryPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold">レシート履歴</h1>
-            {!loading && (
-              <p className="text-sm text-muted-foreground">{total}件</p>
-            )}
+            <div className="flex items-center gap-2">
+              {!loading && (
+                <p className="text-sm text-muted-foreground">{total}件</p>
+              )}
+              {!loading && total > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    try {
+                      await exportCsv(filters);
+                    } catch {
+                      toast.error("CSVエクスポートに失敗しました");
+                    }
+                  }}
+                >
+                  <Download className="h-4 w-4 mr-1" />
+                  CSV
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* フィルタ・ソート */}

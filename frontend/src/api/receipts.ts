@@ -38,3 +38,26 @@ export async function updateReceipt(id: number, body: ReceiptUpdate): Promise<Re
 export async function deleteReceipt(id: number): Promise<void> {
   await client.delete(`/receipts/${id}`);
 }
+
+export async function exportCsv(filters?: ReceiptFilterParams): Promise<void> {
+  const params: Record<string, string | number> = {};
+  if (filters) {
+    for (const [key, value] of Object.entries(filters)) {
+      if (value !== undefined && value !== "") {
+        params[key] = value;
+      }
+    }
+  }
+  const { data } = await client.get("/receipts/export/csv", {
+    params,
+    responseType: "blob",
+  });
+  const url = URL.createObjectURL(data as Blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "receipts.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
