@@ -3,6 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import ScanPage from "@/pages/ScanPage";
 import HistoryPage from "@/pages/HistoryPage";
 import ReceiptDetailPage from "@/pages/ReceiptDetailPage";
+import DashboardPage from "@/pages/DashboardPage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<ScanPage />} />
         <Route path="/history" element={<HistoryPage />} />
         <Route path="/receipts/:id" element={<ReceiptDetailPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
       </Routes>
       <Toaster />
     </BrowserRouter>

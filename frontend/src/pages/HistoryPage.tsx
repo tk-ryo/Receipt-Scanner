@@ -5,9 +5,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Header from "@/components/layout/Header";
 import PageContainer from "@/components/layout/PageContainer";
+import ReceiptFilters from "@/components/receipt/ReceiptFilters";
 import { useReceipts } from "@/hooks/useReceipts";
 import type { Receipt } from "@/types/receipt";
-import { ChevronLeft, ChevronRight, Receipt as ReceiptIcon } from "lucide-react";
+import { exportCsv } from "@/api/receipts";
+import { ChevronLeft, ChevronRight, Download, Receipt as ReceiptIcon, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 
 function formatAmount(amount: number | null): string {
   if (amount == null) return "-";
@@ -15,10 +18,24 @@ function formatAmount(amount: number | null): string {
 }
 
 function ReceiptCard({ receipt }: { receipt: Receipt }) {
+  const thumbnailUrl = receipt.thumbnail_path
+    ? `http://localhost:8000${receipt.thumbnail_path}`
+    : null;
+
   return (
     <Link to={`/receipts/${receipt.id}`}>
       <Card className="hover:bg-accent/50 transition-colors cursor-pointer">
-        <CardContent className="flex items-center justify-between py-4">
+        <CardContent className="flex items-center gap-3 py-4">
+          {/* サムネイル */}
+          {thumbnailUrl && (
+            <div className="shrink-0 h-14 w-14 overflow-hidden rounded border bg-muted">
+              <img
+                src={thumbnailUrl}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            </div>
+          )}
           <div className="min-w-0 flex-1">
             <p className="font-medium truncate">
               {receipt.store_name ?? "店名不明"}
@@ -54,7 +71,7 @@ function ReceiptCard({ receipt }: { receipt: Receipt }) {
 const PER_PAGE = 20;
 
 export default function HistoryPage() {
-  const { items, total, loading, error, page, setPage } = useReceipts();
+  const { items, total, loading, error, page, setPage, filters, setFilters, refresh } = useReceipts();
   const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
 
   return (
@@ -64,10 +81,31 @@ export default function HistoryPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h1 className="text-xl font-bold">レシート履歴</h1>
-            {!loading && (
-              <p className="text-sm text-muted-foreground">{total}件</p>
-            )}
+            <div className="flex items-center gap-2">
+              {!loading && (
+                <p className="text-sm text-muted-foreground">{total}件</p>
+              )}
+              {!loading && total > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={async () => {
+                    try {
+                      await exportCsv(filters);
+                    } catch {
+                      toast.error("CSVエクスポートに失敗しました");
+                    }
+                  }}
+                >
+                  <Download className="h-4 w-4 mr-1" />
+                  CSV
+                </Button>
+              )}
+            </div>
           </div>
+
+          {/* フィルタ・ソート */}
+          <ReceiptFilters filters={filters} onFiltersChange={setFilters} />
 
           {/* ローディング */}
           {loading && (
@@ -80,8 +118,17 @@ export default function HistoryPage() {
 
           {/* エラー */}
           {error && (
-            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-              {error}
+            <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
+              <span>{error}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={refresh}
+                className="ml-4 shrink-0"
+              >
+                <RefreshCw className="h-4 w-4 mr-1" />
+                再試行
+              </Button>
             </div>
           )}
 

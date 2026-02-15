@@ -22,6 +22,12 @@ export default function Header() {
           >
             履歴
           </Link>
+          <Link
+            to="/dashboard"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            ダッシュボード
+          </Link>
         </nav>
       </div>
     </header>

@@ -5,10 +5,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import Header from "@/components/layout/Header";
 import PageContainer from "@/components/layout/PageContainer";
 import AnalysisResult from "@/components/receipt/AnalysisResult";
+import ImageLightbox from "@/components/receipt/ImageLightbox";
 import ReceiptEditForm from "@/components/receipt/ReceiptEditForm";
 import { deleteReceipt, getReceipt } from "@/api/receipts";
 import type { Receipt } from "@/types/receipt";
-import { ArrowLeft, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, RefreshCw, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 export default function ReceiptDetailPage() {
@@ -19,6 +20,7 @@ export default function ReceiptDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   const fetch = useCallback(async () => {
     if (!id) return;
@@ -80,8 +82,17 @@ export default function ReceiptDetailPage() {
 
         {/* エラー */}
         {error && (
-          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
-            {error}
+          <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive flex items-center justify-between">
+            <span>{error}</span>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetch}
+              className="ml-4 shrink-0"
+            >
+              <RefreshCw className="h-4 w-4 mr-1" />
+              再試行
+            </Button>
           </div>
         )}
 
@@ -90,13 +101,21 @@ export default function ReceiptDetailPage() {
           <div className="grid gap-6 md:grid-cols-2">
             {/* 左カラム: 画像 */}
             <div className="space-y-4">
-              <div className="overflow-hidden rounded-lg border">
+              <div
+                className="overflow-hidden rounded-lg border cursor-zoom-in"
+                onClick={() => setLightboxOpen(true)}
+              >
                 <img
                   src={`http://localhost:8000${receipt.image_path}`}
                   alt="レシート画像"
                   className="w-full object-contain"
                 />
               </div>
+              <ImageLightbox
+                open={lightboxOpen}
+                onOpenChange={setLightboxOpen}
+                src={`http://localhost:8000${receipt.image_path}`}
+              />
 
               {/* アクションボタン */}
               <div className="flex gap-2">

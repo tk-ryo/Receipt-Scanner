@@ -41,6 +41,7 @@ class ReceiptUpdate(ReceiptBase):
 class ReceiptResponse(ReceiptBase):
     id: int
     image_path: str
+    thumbnail_path: str | None = None
     items: list[ReceiptItemResponse] = []
     created_at: datetime.datetime
     updated_at: datetime.datetime
@@ -57,3 +58,18 @@ class ReceiptListResponse(BaseModel):
 
 class VisionResponse(ReceiptBase):
     items: list[ReceiptItemCreate] = []
+
+
+# --- Batch Scan ---
+
+class BatchScanResultItem(BaseModel):
+    filename: str
+    success: bool
+    receipt: ReceiptResponse | None = None
+    error: str | None = None
+
+
+class BatchScanResponse(BaseModel):
+    results: list[BatchScanResultItem]
+    success_count: int
+    error_count: int

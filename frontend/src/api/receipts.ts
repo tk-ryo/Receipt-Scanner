@@ -1,5 +1,5 @@
 import client from "./client";
-import type { Receipt, ReceiptListResponse, ReceiptUpdate } from "@/types/receipt";
+import type { BatchScanResult, Receipt, ReceiptFilterParams, ReceiptListResponse, ReceiptUpdate } from "@/types/receipt";
 
 export async function scanReceipt(file: File): Promise<Receipt> {
   const formData = new FormData();
@@ -8,10 +8,29 @@ export async function scanReceipt(file: File): Promise<Receipt> {
   return data;
 }
 
-export async function getReceipts(skip = 0, limit = 20): Promise<ReceiptListResponse> {
-  const { data } = await client.get<ReceiptListResponse>("/receipts", {
-    params: { skip, limit },
-  });
+export async function batchScanReceipts(files: File[]): Promise<BatchScanResult> {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append("files", file);
+  }
+  const { data } = await client.post<BatchScanResult>("/receipts/scan/batch", formData);
+  return data;
+}
+
+export async function getReceipts(
+  skip = 0,
+  limit = 20,
+  filters?: ReceiptFilterParams,
+): Promise<ReceiptListResponse> {
+  const params: Record<string, string | number> = { skip, limit };
+  if (filters) {
+    for (const [key, value] of Object.entries(filters)) {
+      if (value !== undefined && value !== "") {
+        params[key] = value;
+      }
+    }
+  }
+  const { data } = await client.get<ReceiptListResponse>("/receipts", { params });
   return data;
 }
 
@@ -27,4 +46,27 @@ export async function updateReceipt(id: number, body: ReceiptUpdate): Promise<Re
 
 export async function deleteReceipt(id: number): Promise<void> {
   await client.delete(`/receipts/${id}`);
+}
+
+export async function exportCsv(filters?: ReceiptFilterParams): Promise<void> {
+  const params: Record<string, string | number> = {};
+  if (filters) {
+    for (const [key, value] of Object.entries(filters)) {
+      if (value !== undefined && value !== "") {
+        params[key] = value;
+      }
+    }
+  }
+  const { data } = await client.get("/receipts/export/csv", {
+    params,
+    responseType: "blob",
+  });
+  const url = URL.createObjectURL(data as Blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "receipts.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }
