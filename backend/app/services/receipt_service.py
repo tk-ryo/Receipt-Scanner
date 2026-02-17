@@ -6,6 +6,8 @@ from sqlalchemy.orm import Session
 from app.models.receipt import Receipt, ReceiptItem
 from app.schemas.receipt import ReceiptUpdate, VisionResponse
 
+ALLOWED_SORT_FIELDS = {"created_at", "date", "total_amount", "store_name"}
+
 
 def create_receipt(
     db: Session,
@@ -73,8 +75,10 @@ def get_receipts(
 
     total = query.count()
 
-    # ソート
-    sort_column = getattr(Receipt, sort_by, Receipt.created_at)
+    # ソート（許可されたフィールドのみ）
+    if sort_by not in ALLOWED_SORT_FIELDS:
+        sort_by = "created_at"
+    sort_column = getattr(Receipt, sort_by)
     if sort_order == "asc":
         query = query.order_by(sort_column.asc())
     else:
@@ -116,10 +120,20 @@ def update_receipt(db: Session, receipt: Receipt, data: ReceiptUpdate) -> Receip
 
 def delete_receipt(db: Session, receipt: Receipt, upload_dir: Path) -> None:
     """レシートをDBから削除し、画像ファイルも削除する。"""
+    image_name = Path(receipt.image_path).name
+    thumbnail_name = Path(receipt.thumbnail_path).name if receipt.thumbnail_path else None
+
+    # DB削除を先に行い、成功後にファイル削除
+    db.delete(receipt)
+    db.commit()
+
     # 画像ファイル削除
-    image_file = upload_dir / Path(receipt.image_path).name
+    image_file = upload_dir / image_name
     if image_file.exists():
         image_file.unlink()
 
-    db.delete(receipt)
-    db.commit()
+    # サムネイル削除
+    if thumbnail_name:
+        thumb_file = upload_dir / "thumbs" / thumbnail_name
+        if thumb_file.exists():
+            thumb_file.unlink()

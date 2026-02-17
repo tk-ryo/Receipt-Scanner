@@ -18,6 +18,7 @@ def get_monthly_summary(db: Session, year: int, month: int) -> MonthlySummaryRes
             func.sum(Receipt.total_amount).label("total_amount"),
             func.count(Receipt.id).label("count"),
         )
+        .filter(Receipt.date.isnot(None))
         .filter(extract("year", Receipt.date) == year)
         .filter(extract("month", Receipt.date) == month)
         .group_by(func.coalesce(Receipt.category, "未分類"))

@@ -1,5 +1,6 @@
 import datetime
 import logging
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile
 from fastapi.responses import StreamingResponse
@@ -14,12 +15,11 @@ from app.schemas.receipt import (
     ReceiptResponse,
     ReceiptUpdate,
 )
-
-logger = logging.getLogger(__name__)
 from app.services.category_service import classify_by_items
 from app.services.export_service import generate_csv
 from app.services.image_service import generate_thumbnail, save_image
 from app.services.receipt_service import (
+    ALLOWED_SORT_FIELDS,
     create_receipt,
     delete_receipt,
     get_receipt,
@@ -28,7 +28,19 @@ from app.services.receipt_service import (
 )
 from app.services.vision_service import analyze_receipt
 
+logger = logging.getLogger(__name__)
+
 router = APIRouter(prefix="/receipts", tags=["receipts"])
+
+
+def _cleanup_uploaded_file(image_path: str) -> None:
+    """アップロード済みファイルを削除する（解析失敗時のクリーンアップ）。"""
+    try:
+        filepath = UPLOAD_DIR / Path(image_path).name
+        if filepath.exists():
+            filepath.unlink()
+    except Exception:
+        logger.warning("クリーンアップ失敗: %s", image_path, exc_info=True)
 
 
 @router.post("/scan", response_model=ReceiptResponse, status_code=201)
@@ -45,8 +57,10 @@ async def scan_receipt(file: UploadFile, db: Session = Depends(get_db)):
         absolute_path = str(UPLOAD_DIR.parent / image_path.lstrip("/"))
         vision, raw_response = await analyze_receipt(absolute_path)
     except ValueError as e:
+        _cleanup_uploaded_file(image_path)
         raise HTTPException(status_code=422, detail=str(e))
     except Exception as e:
+        _cleanup_uploaded_file(image_path)
         raise HTTPException(status_code=500, detail=f"AI解析中にエラーが発生しました: {e}")
 
     # 3. カテゴリ補完（Vision API が null の場合）
@@ -77,12 +91,13 @@ async def batch_scan_receipts(
 
     for file in files:
         filename = file.filename or "unknown"
+        saved_image_path = None
         try:
             # 1. 画像保存
-            image_path = await save_image(file)
+            saved_image_path = await save_image(file)
 
             # 2. Vision API で解析
-            absolute_path = str(UPLOAD_DIR.parent / image_path.lstrip("/"))
+            absolute_path = str(UPLOAD_DIR.parent / saved_image_path.lstrip("/"))
             vision, raw_response = await analyze_receipt(absolute_path)
 
             # 3. カテゴリ補完
@@ -93,10 +108,10 @@ async def batch_scan_receipts(
                     vision.category = inferred
 
             # 4. サムネイル生成
-            thumbnail_path = generate_thumbnail(image_path)
+            thumbnail_path = generate_thumbnail(saved_image_path)
 
             # 5. DB保存
-            receipt = create_receipt(db, image_path, vision, raw_response, thumbnail_path=thumbnail_path)
+            receipt = create_receipt(db, saved_image_path, vision, raw_response, thumbnail_path=thumbnail_path)
 
             results.append(BatchScanResultItem(
                 filename=filename,
@@ -106,6 +121,8 @@ async def batch_scan_receipts(
             success_count += 1
         except Exception as e:
             logger.warning("Batch scan failed for %s: %s", filename, e)
+            if saved_image_path:
+                _cleanup_uploaded_file(saved_image_path)
             results.append(BatchScanResultItem(
                 filename=filename,
                 success=False,
@@ -135,6 +152,8 @@ def list_receipts(
     db: Session = Depends(get_db),
 ):
     """レシート一覧を取得する（ページネーション・フィルタ・ソート対応）。"""
+    if sort_by not in ALLOWED_SORT_FIELDS:
+        raise HTTPException(status_code=400, detail="無効なソートフィールドです")
     items, total = get_receipts(
         db,
         skip=skip,
@@ -164,6 +183,8 @@ def export_csv(
     db: Session = Depends(get_db),
 ):
     """フィルタ条件に合致するレシートをCSVでエクスポートする。"""
+    if sort_by not in ALLOWED_SORT_FIELDS:
+        raise HTTPException(status_code=400, detail="無効なソートフィールドです")
     items, _ = get_receipts(
         db,
         skip=0,

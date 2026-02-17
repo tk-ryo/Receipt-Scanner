@@ -1,8 +1,11 @@
+import asyncio
+import io
 import logging
 import uuid
 from pathlib import Path
 
 from fastapi import UploadFile
+from PIL import Image
 
 from app.config import ALLOWED_MIME_TYPES, MAX_FILE_SIZE, THUMBNAIL_DIR, UPLOAD_DIR
 
@@ -14,13 +17,35 @@ EXTENSION_MAP = {
     "image/webp": ".webp",
 }
 
+ALLOWED_IMAGE_FORMATS = {"JPEG", "PNG", "WEBP"}
+
+FORMAT_TO_EXT = {
+    "JPEG": ".jpg",
+    "PNG": ".png",
+    "WEBP": ".webp",
+}
+
 
 def validate_image(file: UploadFile) -> None:
-    """MIMEタイプとファイルサイズを検証する。"""
+    """MIMEタイプを検証する（Content-Type ヘッダーの事前チェック）。"""
     if file.content_type not in ALLOWED_MIME_TYPES:
         raise ValueError(
             f"対応していないファイル形式です: {file.content_type}（JPEG/PNG/WebPのみ対応）"
         )
+
+
+def _validate_image_content(content: bytes) -> str:
+    """マジックバイトを検証し、検出された画像フォーマットを返す。"""
+    try:
+        img = Image.open(io.BytesIO(content))
+        img.verify()
+        if img.format not in ALLOWED_IMAGE_FORMATS:
+            raise ValueError("サポートされていない画像形式です")
+        return img.format
+    except ValueError:
+        raise
+    except Exception:
+        raise ValueError("有効な画像ファイルではありません")
 
 
 async def save_image(file: UploadFile) -> str:
@@ -33,11 +58,13 @@ async def save_image(file: UploadFile) -> str:
             f"ファイルサイズが上限を超えています: {len(content)} bytes（上限: {MAX_FILE_SIZE // 1024 // 1024}MB）"
         )
 
-    ext = EXTENSION_MAP.get(file.content_type, ".jpg")
+    image_format = _validate_image_content(content)
+
+    ext = FORMAT_TO_EXT.get(image_format, ".jpg")
     filename = f"{uuid.uuid4()}{ext}"
     filepath = UPLOAD_DIR / filename
 
-    filepath.write_bytes(content)
+    await asyncio.to_thread(filepath.write_bytes, content)
 
     return f"/uploads/{filename}"
 
@@ -45,18 +72,18 @@ async def save_image(file: UploadFile) -> str:
 def generate_thumbnail(image_path: str, size: tuple[int, int] = (200, 200)) -> str | None:
     """画像からサムネイルを生成し、uploads/thumbs/ に保存する。パスを返す。"""
     try:
-        from PIL import Image
-
         source = UPLOAD_DIR.parent / image_path.lstrip("/")
+        if not source.resolve().is_relative_to(UPLOAD_DIR):
+            logger.warning("パストラバーサル検出: %s", image_path)
+            return None
         if not source.exists():
             return None
 
-        img = Image.open(source)
-        img.thumbnail(size)
-
-        thumb_name = f"{uuid.uuid4()}.jpg"
-        thumb_path = THUMBNAIL_DIR / thumb_name
-        img.convert("RGB").save(thumb_path, "JPEG", quality=85)
+        with Image.open(source) as img:
+            img.thumbnail(size)
+            thumb_name = f"{uuid.uuid4()}.jpg"
+            thumb_path = THUMBNAIL_DIR / thumb_name
+            img.convert("RGB").save(thumb_path, "JPEG", quality=85)
 
         return f"/uploads/thumbs/{thumb_name}"
     except Exception:

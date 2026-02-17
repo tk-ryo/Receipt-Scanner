@@ -8,6 +8,15 @@ import anthropic
 from app.config import ANTHROPIC_API_KEY, MOCK_VISION, VISION_MODEL
 from app.schemas.receipt import VisionResponse
 
+_client: anthropic.AsyncAnthropic | None = None
+
+
+def _get_client() -> anthropic.AsyncAnthropic:
+    global _client
+    if _client is None:
+        _client = anthropic.AsyncAnthropic(api_key=ANTHROPIC_API_KEY)
+    return _client
+
 MOCK_RESPONSE = {
     "store_name": "テストマート 渋谷店",
     "date": "2026-02-10",
@@ -69,11 +78,12 @@ MIME_MAP = {
 }
 
 
-def _encode_image(image_path: str) -> tuple[str, str]:
+async def _encode_image(image_path: str) -> tuple[str, str]:
     """画像ファイルをbase64エンコードし、(base64文字列, media_type) を返す。"""
+    import asyncio
     path = Path(image_path)
     media_type = MIME_MAP.get(path.suffix.lower(), "image/jpeg")
-    data = path.read_bytes()
+    data = await asyncio.to_thread(path.read_bytes)
     return base64.standard_b64encode(data).decode("utf-8"), media_type
 
 
@@ -106,11 +116,11 @@ async def analyze_receipt(image_path: str) -> tuple[VisionResponse, str]:
     if not ANTHROPIC_API_KEY:
         raise ValueError("ANTHROPIC_API_KEY が設定されていません")
 
-    b64_data, media_type = _encode_image(image_path)
+    b64_data, media_type = await _encode_image(image_path)
 
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    client = _get_client()
 
-    message = client.messages.create(
+    message = await client.messages.create(
         model=VISION_MODEL,
         max_tokens=2048,
         messages=[
@@ -134,6 +144,8 @@ async def analyze_receipt(image_path: str) -> tuple[VisionResponse, str]:
         ],
     )
 
+    if not message.content or not hasattr(message.content[0], "text"):
+        raise ValueError("APIレスポンスにテキストが含まれていません")
     raw_text = message.content[0].text
     parsed = _extract_json(raw_text)
     if parsed.get("items") is None:

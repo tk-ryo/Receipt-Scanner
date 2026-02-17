@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Column, Date, DateTime, Float, ForeignKey, Integer, Text
 from sqlalchemy.orm import relationship
@@ -19,8 +19,8 @@ class Receipt(Base):
     image_path = Column(Text, nullable=False)
     thumbnail_path = Column(Text, nullable=True)
     raw_response = Column(Text, nullable=True)
-    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(DateTime, nullable=False, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     items = relationship("ReceiptItem", back_populates="receipt", cascade="all, delete-orphan")
 
